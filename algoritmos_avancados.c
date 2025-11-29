@@ -1,11 +1,80 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+typedef struct Sala {
+    char nome[50];
+    struct Sala *esq;
+    struct Sala *dir;
+} Sala;
+Sala* criarSala(const char *nome) {
+    Sala *nova = (Sala*) malloc(sizeof(Sala));
+    strcpy(nova->nome, nome);
+    nova->esq = NULL;
+    nova->dir = NULL;
+    return nova;
+}
+void conectarSalas(Sala *sala, Sala *esq, Sala *dir) {
+    sala->esq = esq;
+    sala->dir = dir;
+}
+void explorarSalas(Sala *atual) {
+    char opcao;
 
-// Desafio Detective Quest
-// Tema 4 - Árvores e Tabela Hash
-// Este código inicial serve como base para o desenvolvimento das estruturas de navegação, pistas e suspeitos.
-// Use as instruções de cada região para desenvolver o sistema completo com árvore binária, árvore de busca e tabela hash.
+    while (1) {
+        printf("\n📍 Você está na sala: **%s**\n", atual->nome);
+        printf("Para onde deseja ir?\n");
+        printf("  (e) Ir para a sala da ESQUERDA\n");
+        printf("  (d) Ir para a sala da DIREITA\n");
+        printf("  (s) Sair da exploração\n");
+        printf("> ");
+        scanf(" %c", &opcao);
+
+        if (opcao == 's') {
+            printf("\n🧭 Você decidiu sair da exploração.\n");
+            break;
+        }
+        else if (opcao == 'e') {
+            if (atual->esq != NULL) {
+                atual = atual->esq;
+            } else {
+                printf("❌ Não há sala à esquerda!\n");
+            }
+        }
+        else if (opcao == 'd') {
+            if (atual->dir != NULL) {
+                atual = atual->dir;
+            } else {
+                printf("❌ Não há sala à direita!\n");
+            }
+        }
+        else {
+            printf("⚠ Opção inválida!\n");
+        }
+    }
+}
 
 int main() {
+printf("🔎 Bem-vindo ao Detective Quest – Nível Novato!\n");
+Sala *hall       = criarSala("Hall de Entrada");
+    Sala *biblioteca = criarSala("Biblioteca");
+    Sala *cozinha    = criarSala("Cozinha");
+    Sala *salaJantar = criarSala("Sala de Jantar");
+    Sala *sotao      = criarSala("Sótão");
+    Sala *dispensa   = criarSala("Dispensa");
+
+    // Conectando (árvore binária fixa)
+    //             Hall
+    //       /              \
+    // Biblioteca          Cozinha
+    //     /  \            /     \
+    // Sótão SalaJantar Dispensa NULL
+
+    conectarSalas(hall, biblioteca, cozinha);
+    conectarSalas(biblioteca, sotao, salaJantar);
+    conectarSalas(cozinha, dispensa, NULL);
+
+    printf("🔎 Bem-vindo ao Detective Quest – Nível Novato!\n");
+    explorarSalas(hall);
 
     // 🌱 Nível Novato: Mapa da Mansão com Árvore Binária
     //
